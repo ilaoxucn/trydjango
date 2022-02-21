@@ -1,0 +1,24 @@
+{% extends 'base.html '%}
+
+{% block content %}
+{{request.user}}
+<h1>{{article.title}}</h1><p>{{article.content}}</p>
+<div>
+    <h1>推广文章</h1>
+    <a href="{% url 'articles:article-detail'  slug='wen-zhang-biao-ti-2' %}">
+        推广文章
+    </a>
+    <a href="{% url 'articles:article-create'%}">
+        新建文章
+    </a>
+</div>
+<ul>
+    {% for item in object_list%}
+        <li>
+            <a href="{{ item.get_absolute_url }}">
+            {{item.title}} - {{item.content}}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

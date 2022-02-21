@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if request.user.is_authenticated %}
+    <div style="margin-top: 30px;">
+        {% if error %}
+        <p style="color: #ff0000;">{{ error }}</p>
+        {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <p>确定要注销吗?</p>
+        <div  style="margin-top: 10px;">
+            <button type="submit">注销</button>
+        </div>
+    </form>
+    </div>
+    {% else%}
+    <p>您还没有登录!现在<a href="/login/">登录</a></p>
+    {% endif %}
+{% endblock %}

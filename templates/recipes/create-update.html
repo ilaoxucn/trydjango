@@ -1,0 +1,19 @@
+{% extends 'base.html'%}
+{% block content %}
+    <div style="margin-top: 30px;">
+     {% if message %}
+        <p>{{ message }}</p>
+     {% endif %}
+    <form action="." method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <h3>所需材料</h3>
+        {% if formset %}
+            {{ formset.as_p }}
+        {% endif %}
+        <div  style="margin-top: 10px;">
+            <button type="submit">新建</button>
+        </div>
+    </form>
+    </div>
+{% endblock %}

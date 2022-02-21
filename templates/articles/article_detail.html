@@ -1,0 +1,10 @@
+{% extends 'base.html'%} 
+
+{% block content %}
+    <p>作者:{{ object.user }}</p>
+    {% if request.user == object.user %}
+        <p>您是文章的作者</p>
+    {% endif %}
+    <h1>{{object.title}}</h1>
+    <p>{{object.content}}</p>
+{% endblock %}
