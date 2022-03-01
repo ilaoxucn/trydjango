@@ -1,5 +1,10 @@
 {% extends 'base.html'%}
 {% block content %}
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
     <div style="margin-top: 30px;">
      {% if message %}
         <p>{{ message }}</p>
@@ -19,16 +24,43 @@
         {% endfor %}
         <h3>所需材料</h3>
         {% if formset %}
+        {{ formset.management_form }}
+        <div id="ingredient-form-list">
             {% for form in formset %}
-                {{ formset.management_form }}
-                <div class="ingredient-form">
+            <div class="ingredient-form">
                     {{ form.as_p }}
                 </div>
             {% endfor %}
+            </div>
+            <div id="empty-form" class="hidden">{{ formset.empty_form.as_p }}</div>
+            <button id="add-more" type="button">添加材料</button>
         {% endif %}
         <div  style="margin-top: 10px;">
             <button type="submit">新建</button>
         </div>
     </form>
     </div>
+    <script>
+        addMoreButton = document.getElementById('add-more')
+        addMoreButton.addEventListener('click',add_new_form)
+        const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
+        function add_new_form(event){
+            if(event){
+                event.preventDefault()
+            }
+            const currentIngredientForms = document.getElementsByClassName('ingredient-form')
+            const currentFormCount = currentIngredientForms.length
+           
+
+            const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
+            copyEmptyFormEl.setAttribute('class','ingredient-form')
+            copyEmptyFormEl.setAttribute('id',`form-${currentFormCount}`)
+            const regex = new RegExp('__prefix__','g')
+            copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex,currentFormCount)
+            const ingredientList = document.getElementById('ingredient-form-list')
+            totalNewForms.setAttribute('value',currentFormCount+1)
+            console.log(totalNewForms.getAttribute('value'))
+            ingredientList.append(copyEmptyFormEl)
+        }
+    </script>
 {% endblock %}

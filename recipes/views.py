@@ -40,6 +40,8 @@ def recipe_update_view(request,id=None):
     obj = get_object_or_404(Recipe,id=id,user=request.user)
     form = RecipeForm(request.POST or None,instance=obj)
     #Formset = modelformset_factory(Model,ModelForm,extra = 0)
+    if request.method=='POST':
+        print(request.POST)
     RecipeIngredientFormset = modelformset_factory(
         RecipeIngredient,
         form=RecipeIngredientForm,
@@ -54,11 +56,11 @@ def recipe_update_view(request,id=None):
     if all([form.is_valid(),formset.is_valid()]):
         recipe = form.save(commit=False)
         recipe.save()
-        formset.save()   
-        # for ingredient_form in formset:
-        #     ingredient = ingredient_form.save(commit=False)
-        #     ingredient.recipe=recipe
-        #     ingredient.save() 
+        #formset.save()   
+        for ingredient_form in formset:
+            ingredient = ingredient_form.save(commit=False)
+            ingredient.recipe=recipe
+            ingredient.save() 
         context['message']='数据已保存'
     return render(request,"recipes/create-update.html",context)
 
