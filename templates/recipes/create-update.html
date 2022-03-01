@@ -6,10 +6,25 @@
      {% endif %}
     <form action="." method="POST">
         {% csrf_token %}
-        {{form.as_p}}
+        <!-- {{ form.as_p }} -->
+        {% for field in form %}
+            <div class="{% if field.field.required %}{{form.required_css_class}}{% endif %}">
+            {{ field }}
+            {% if field.help_text %}
+                <p class="help">
+                    {{ field.help_text| safe }}
+                </p>
+            {% endif %}
+            </div>
+        {% endfor %}
         <h3>所需材料</h3>
         {% if formset %}
-            {{ formset.as_p }}
+            {% for form in formset %}
+                {{ formset.management_form }}
+                <div class="ingredient-form">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
         {% endif %}
         <div  style="margin-top: 10px;">
             <button type="submit">新建</button>
