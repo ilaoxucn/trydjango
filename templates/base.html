@@ -5,6 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+    <style>
+        .htmx-indicator {
+            display:none;
+        }
+        .htmx-request .htmx-indicator{
+            display:inline;
+        }
+        .htmx-button-indicator{
+            display:inline;
+        }
+        .html-request .html-button-indicator{
+            display:none;
+        }
+    </style>
 </head>
 <body>
     <form action="/articles/">

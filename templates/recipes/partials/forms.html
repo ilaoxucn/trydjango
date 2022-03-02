@@ -1,0 +1,26 @@
+
+<form action="." method="POST" hx-post="." hx-swap="outerHTML">
+    {% csrf_token %}
+    <!-- {{ form.as_p }} -->
+    {% for field in form %}
+        <div class="{% if field.field.required %}{{form.required_css_class}}{% endif %}">
+        {{ field }}
+        {% if field.help_text %}
+            <p class="help">
+                {{ field.help_text| safe }}
+            </p>
+        {% endif %}
+        </div>
+    {% endfor %}
+    <h3>所需材料</h3>
+    
+    <div  style="margin-top: 10px;">
+        <div class="htmx-indicator">加载中</div>
+        <button class="htmx-button-indicator" type="submit">新建</button>
+    </div>
+    <div style="margin-top: 30px;">
+        {% if message %}
+           <p>{{ message }}</p>
+        {% endif %}   
+    </div>
+</form>

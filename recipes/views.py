@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.forms.models import modelformset_factory
+from django.shortcuts import reverse
+from django.http import HttpResponse,Http404
 from .models import Recipe,RecipeIngredient
 from .forms import RecipeForm,RecipeIngredientForm
 # CRUD Create Retrieve Update Delete
@@ -8,9 +10,9 @@ from .forms import RecipeForm,RecipeIngredientForm
 
 @login_required
 def recipe_detail_view(request,id=None):
-    obj = get_object_or_404(Recipe,id=id,user=request.user)
+    hx_url = reverse('recipes:hx-detail',kwargs={"id":id})
     context = {
-        'object':obj
+        'hx_url':hx_url
     }
     return render(request,"recipes/detail.html",context)
 
@@ -40,8 +42,7 @@ def recipe_update_view(request,id=None):
     obj = get_object_or_404(Recipe,id=id,user=request.user)
     form = RecipeForm(request.POST or None,instance=obj)
     #Formset = modelformset_factory(Model,ModelForm,extra = 0)
-    if request.method=='POST':
-        print(request.POST)
+    
     RecipeIngredientFormset = modelformset_factory(
         RecipeIngredient,
         form=RecipeIngredientForm,
@@ -62,6 +63,8 @@ def recipe_update_view(request,id=None):
             ingredient.recipe=recipe
             ingredient.save() 
         context['message']='数据已保存'
+    if request.htmx:
+        return render(request,'recipes/partials/forms.html',context)
     return render(request,"recipes/create-update.html",context)
 
 @login_required
@@ -69,5 +72,18 @@ def recipe_delete_view(request,id=None):
     obj = get_object_or_404(Recipe,id=id)
     obj.delete()
     
+@login_required
+def recipe_detail_hx_view(request,id=None):
+    try:
+        obj = Recipe.objects.get(id=id,user=request.user)
+    except:
+        obj = None
+    if obj is None:
+        return HttpResponse("未找到")
+        #raise Http404
+    context = {
+        'object':obj
+    }
+    return render(request,"recipes/partials/detail.html",context)
 
 

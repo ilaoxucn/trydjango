@@ -5,46 +5,18 @@
             display: none;
         }
     </style>
-    <div style="margin-top: 30px;">
-     {% if message %}
-        <p>{{ message }}</p>
-     {% endif %}
-    <form action="." method="POST">
-        {% csrf_token %}
-        <!-- {{ form.as_p }} -->
-        {% for field in form %}
-            <div class="{% if field.field.required %}{{form.required_css_class}}{% endif %}">
-            {{ field }}
-            {% if field.help_text %}
-                <p class="help">
-                    {{ field.help_text| safe }}
-                </p>
-            {% endif %}
-            </div>
-        {% endfor %}
-        <h3>所需材料</h3>
-        {% if formset %}
-        {{ formset.management_form }}
-        <div id="ingredient-form-list">
-            {% for form in formset %}
-            <div class="ingredient-form">
-                    {{ form.as_p }}
-                </div>
-            {% endfor %}
-            </div>
-            <div id="empty-form" class="hidden">{{ formset.empty_form.as_p }}</div>
-            <button id="add-more" type="button">添加材料</button>
-        {% endif %}
-        <div  style="margin-top: 10px;">
-            <button type="submit">新建</button>
-        </div>
-    </form>
-    </div>
+   {% include 'recipes/partials/forms.html' %}
     <script>
         addMoreButton = document.getElementById('add-more')
-        addMoreButton.addEventListener('click',add_new_form)
-        const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
+        
+        document.addEventListener('click',(event)=>{
+            if(event.target.id==='add-more'){
+                add_new_form(event)
+            }
+        })
+        
         function add_new_form(event){
+            const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
             if(event){
                 event.preventDefault()
             }

@@ -1,13 +1,7 @@
-{% extends 'base.html'%} 
+{% extends 'base.html' %}
 
 {% block content %}
-    <p>作者:{{ object.user }}</p>
-    
-    <h1>{{object.name}}</h1>
-    <a href="{{ object.get_edit_url }}">修改菜谱</a>
-    <ul>
-    {% for ingredient in object.get_ingredient_children %}
-        <li>{{ ingredient.name }}</li>
-    {% endfor %}
-    </ul>
+<div hx-get="{{ hx_url }}" hx-trigger="revealed">
+    <div class="htmx-indicator">加载中</div>
+</div>
 {% endblock %}
