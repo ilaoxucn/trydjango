@@ -45,3 +45,10 @@ class RecipeIngredient(models.Model):
             self.quantity_as_float=None
         super().save(*args,**kwargs)
 
+    def get_hx_edit_url(self):
+        kwargs = {
+            "id":self.recipe.id,
+            "ingredient_id":self.id
+        }
+        return reverse("recipes:hx-ingredient-detail",kwargs=kwargs)
+

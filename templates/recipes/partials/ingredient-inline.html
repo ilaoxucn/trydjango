@@ -1,0 +1,12 @@
+<div id="ingredient-{{object.id}}">
+    {{ object.quantity }}
+    {{ object.unit }} -
+    {{ object.name }}
+    <button 
+        hx-get="{{object.get_hx_edit_url}}" 
+        hx-target="#ingredient-{{object.id}}"
+        hx-trigger="click"
+        >
+        编辑
+    </button>
+</div>

@@ -41,28 +41,16 @@ def recipe_create_view(request):
 def recipe_update_view(request,id=None):
     obj = get_object_or_404(Recipe,id=id,user=request.user)
     form = RecipeForm(request.POST or None,instance=obj)
-    #Formset = modelformset_factory(Model,ModelForm,extra = 0)
-    
-    RecipeIngredientFormset = modelformset_factory(
-        RecipeIngredient,
-        form=RecipeIngredientForm,
-        extra=0)
-    qs = obj.get_ingredient_children()
-    formset = RecipeIngredientFormset(request.POST or None,queryset=qs)
+    new_ingredient_url = reverse("recipes:hx-ingredient-create",kwargs={'id':obj.id})
     context = {
+        'new_ingredient_url':new_ingredient_url,
         "form":form,
-        "formset":formset,
         "object":obj 
     }
-    if all([form.is_valid(),formset.is_valid()]):
-        recipe = form.save(commit=False)
-        recipe.save()
-        #formset.save()   
-        for ingredient_form in formset:
-            ingredient = ingredient_form.save(commit=False)
-            ingredient.recipe=recipe
-            ingredient.save() 
-        context['message']='数据已保存'
+    if form.is_valid():
+        form.save()
+        context['message']='数据已保存'    
+        
     if request.htmx:
         return render(request,'recipes/partials/forms.html',context)
     return render(request,"recipes/create-update.html",context)
@@ -74,6 +62,8 @@ def recipe_delete_view(request,id=None):
     
 @login_required
 def recipe_detail_hx_view(request,id=None):
+    if not request.htmx:
+        return Http404
     try:
         obj = Recipe.objects.get(id=id,user=request.user)
     except:
@@ -85,5 +75,40 @@ def recipe_detail_hx_view(request,id=None):
         'object':obj
     }
     return render(request,"recipes/partials/detail.html",context)
+
+@login_required
+def recipe_ingredient_detail_hx_view(request,id=None,ingredient_id=None):
+    if not request.htmx:
+        return Http404
+    try:
+        parent_obj = Recipe.objects.get(id=id,user=request.user)
+    except:
+        parent_obj = None
+    if parent_obj is None:
+        return HttpResponse("未找到")
+        #raise Http404
+    instance=None
+    if ingredient_id is not None:
+        try:
+            instance = RecipeIngredient.objects.get(recipe=parent_obj,id=ingredient_id)
+        except:
+            instance = None
+    
+    form = RecipeIngredientForm(request.POST or None,instance=instance)
+    url = instance.get_hx_edit_url() if instance else reverse("recipes:hx-ingredient-create",kwargs={'id':parent_obj.id})
+    context = {
+        'url':url,
+        'form':form,
+        'object':instance
+    }
+    if form.is_valid():
+        new_obj = form.save(commit=False)
+        if instance is None:
+            new_obj.recipe = parent_obj
+        new_obj.save()
+        context['object'] = new_obj
+        return render(request,"recipes/partials/ingredient-inline.html",context)
+   
+    return render(request,"recipes/partials/ingredient-form.html",context)
 
 

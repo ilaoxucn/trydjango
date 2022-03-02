@@ -6,6 +6,21 @@
         }
     </style>
    {% include 'recipes/partials/forms.html' %}
+   <h3>菜谱材料</h3>
+    {% for ingredient in object.get_ingredient_children %}
+        {% include 'recipes/partials/ingredient-inline.html' with object=ingredient %}
+    {% endfor %}
+    {% if new_ingredient_url %}
+        <div id="ingredient-create"></div>
+        <button 
+            hx-get="{{new_ingredient_url}}" 
+            hx-target="#ingredient-create" 
+            hx-trigger="click"
+            hx-swap="beforeend"
+            >
+            添加材料
+        </button>
+    {% endif %}
     <script>
         addMoreButton = document.getElementById('add-more')
         
