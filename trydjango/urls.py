@@ -18,13 +18,9 @@ from django.urls import path
 from .views import home_view
 from accounts.views import register_view
 from django.urls import include
-
-from articles.views import (
-    article_create_view,
-    article_detail_view,
-    article_search_view
-)
 from accounts.views import login_view,logout_view
+from search.views import search_view
+
 urlpatterns = [
     path('',home_view),
     path('articles/',include("articles.urls")),
@@ -33,4 +29,5 @@ urlpatterns = [
     path('logout/',logout_view),
     path('register/',register_view),
     path("pantry/recipes/",include('recipes.urls')),
+    path('search/',search_view,name="search"),
 ]

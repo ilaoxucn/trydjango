@@ -34,6 +34,11 @@ def recipe_create_view(request):
         obj = form.save(commit=False)
         obj.user = request.user
         obj.save()
+        if request.htmx:
+            headers ={
+                "HX-Redirect":obj.get_absolute_url()
+            }
+            return HttpResponse("菜谱已创建",headers=headers)
         return redirect(obj.get_absolute_url())
     return render(request,"recipes/create-update.html",context)
 
@@ -57,8 +62,27 @@ def recipe_update_view(request,id=None):
 
 @login_required
 def recipe_delete_view(request,id=None):
-    obj = get_object_or_404(Recipe,id=id)
-    obj.delete()
+    obj = get_object_or_404(Recipe,id=id,user=request.user)
+    success_url = reverse('recipes:list')
+    if request.method=='POST':
+        obj.delete()
+        return redirect(success_url)
+    context = {
+        'object':obj
+    }
+    return render(request,'recipes/delete.html',context)
+
+@login_required
+def recipe_ingredient_delete_view(request,parent_id=None,id=None):
+    obj = get_object_or_404(RecipeIngredient,recipe__id=parent_id,id=id)
+    success_url = reverse('recipes:detail',kwargs={'id':parent_id})
+    if request.method=='POST':
+        obj.delete()
+        return redirect(success_url)
+    context = {
+        'object':obj
+    }
+    return render(request,'recipes/delete.html',context)
     
 @login_required
 def recipe_detail_hx_view(request,id=None):

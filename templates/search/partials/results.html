@@ -1,0 +1,15 @@
+搜索内容 {{request.GET.query}} ,搜索范围为{{ request.GET.search_type | title }}
+{% for object in queryset %}
+
+    <li>
+        <a href="{{ object.get_absolute_url }}">
+            {{ object.name }}
+        </a>
+    </li>
+   
+    {% empty %}
+    <li>没有发现任何结果</li>
+{% endfor %}
+{% if request.htmx %}
+<a href="/search/?query={{request.GET.query}}&search_type={{request.GET.search_type}}">查看全部</a>
+{% endif %}

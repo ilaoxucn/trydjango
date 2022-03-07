@@ -22,10 +22,7 @@
     </style>
 </head>
 <body>
-    <form action="/articles/">
-        <input type="text" name="query"/>
-        <input type="submit" />
-    </form>
+    {% include 'search/search-form.html'%}
     {% block content %}
 
     {% endblock %}

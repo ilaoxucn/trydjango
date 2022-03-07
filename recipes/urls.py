@@ -5,7 +5,9 @@ from .views import (
     recipe_list_view,
     recipe_update_view,
     recipe_detail_hx_view,
-    recipe_ingredient_detail_hx_view
+    recipe_ingredient_detail_hx_view,
+    recipe_delete_view,
+    recipe_ingredient_delete_view
 )
 
 app_name="recipes"
@@ -16,7 +18,9 @@ urlpatterns = [
     path('create/',recipe_create_view,name="create"),
     path('hx/<int:id>/ingredient/<int:ingredient_id>/',recipe_ingredient_detail_hx_view,name='hx-ingredient-detail'),
     path('hx/<int:id>/ingredient/',recipe_ingredient_detail_hx_view,name='hx-ingredient-create'),
+    path('<int:parent_id>/ingredient/<int:id>/delete/',recipe_ingredient_delete_view,name='ingredient-delete'),
     path('hx/<int:id>/',recipe_detail_hx_view,name='hx-detail'),
     path("<int:id>/edit/",recipe_update_view,name="update"),
     path("<int:id>/",recipe_detail_view,name="detail"),
+    path("<int:id>/delete/",recipe_delete_view,name="delete"),
 ]

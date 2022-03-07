@@ -1,13 +1,11 @@
-{% extends 'base.html'%} 
 
-{% block content %}
-    <p>作者:{{ object.user }}</p>
-    
-    <h1>{{object.name}}</h1>
-    <a href="{{ object.get_edit_url }}">修改菜谱</a>
-    <ul>
-    {% for ingredient in object.get_ingredient_children %}
-        <li>{{ ingredient.name }}</li>
-    {% endfor %}
-    </ul>
-{% endblock %}
+<p>作者:{{ object.user }}</p>
+
+<h1>{{object.name}}</h1>
+<a href="{{ object.get_edit_url }}">修改菜谱</a>
+<a href="{{ object.get_delete_url }}">删除</a>
+<ul>
+{% for ingredient in object.get_ingredient_children %}
+    <li>{{ ingredient.name }}</li>
+{% endfor %}
+</ul>

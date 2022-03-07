@@ -24,6 +24,10 @@ class Article(models.Model):
 
     objects = ArticleManager()
 
+    @property
+    def name(self):
+        return self.title
+
     def save(self,*args,**kwargs):
         # if self.slug is None:
         #     self.slug = slugify(self.title)
