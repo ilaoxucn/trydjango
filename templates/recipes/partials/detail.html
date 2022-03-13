@@ -3,7 +3,12 @@
 
 <h1>{{object.name}}</h1>
 <a href="{{ object.get_edit_url }}">修改菜谱</a>
-<a href="{{ object.get_delete_url }}">删除</a>
+<a  href="{{ object.get_delete_url }}" 
+    hx-post="{{ object.get_delete_url }}"
+    hx-confirm="你确定要删除{{object.name}}吗?" 
+    hx-trigger="click"
+>删除</a>
+
 <ul>
 {% for ingredient in object.get_ingredient_children %}
     <li>{{ ingredient.name }}</li>

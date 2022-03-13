@@ -9,5 +9,11 @@
         >
         编辑
     </button>
-    <a href="{{ object.get_delete_url }}">删除</a>
+    <a href="{{ object.get_delete_url }}"
+        hx-post="{{ object.get_delete_url }}"
+        hx-trigger="click"
+        hx-confirm="确定要删除{{object.name}}吗?"
+        hx-target="#ingredient-{{object.id}}"
+        hx-swap="outerHTML"
+    >删除</a>
 </div>
