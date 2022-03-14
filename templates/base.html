@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,23 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/htmx.org@1.7.0"></script>
-    <style>
-        .htmx-indicator {
-            display:none;
-        }
-        .htmx-request .htmx-indicator{
-            display:inline;
-        }
-        .htmx-button-indicator{
-            display:inline;
-        }
-        .htmx-request .htmx-button-indicator{
-            display:none;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'recipes/recipes-htmx.css' %}"/>
 </head>
 <body>
     {% include 'search/search-form.html'%}
+    {% static 'recipes/recipes-htmx.css' %}
     {% block content %}
 
     {% endblock %}
