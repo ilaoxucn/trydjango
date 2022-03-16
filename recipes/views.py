@@ -1,3 +1,4 @@
+from re import template
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.forms.models import modelformset_factory
@@ -164,7 +165,9 @@ def recipe_ingredient_detail_hx_view(request,id=None,ingredient_id=None):
 
 
 def recipe_ingredient_image_upload_view(request,parent_id=None):
-    print(request.FILES.get('image'))
+    template_name = "recipes/upload-image.html"
+    if request.htmx:
+        template_name="recipes/partials/image-upload-form.html"
     try:
         parent_obj = Recipe.objects.get(id=parent_id,user=request.user)
     except:
@@ -179,4 +182,4 @@ def recipe_ingredient_image_upload_view(request,parent_id=None):
         obj.recipe = parent_obj
         obj.save()
 
-    return render(request,"image-form.html",{"form":form})
+    return render(request,template_name,{"form":form})
