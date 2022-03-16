@@ -4,7 +4,7 @@ from django.forms.models import modelformset_factory
 from django.shortcuts import reverse
 from django.http import HttpResponse,Http404
 from .models import Recipe,RecipeIngredient
-from .forms import RecipeForm,RecipeIngredientForm
+from .forms import RecipeForm,RecipeIngredientForm,RecipeIngredientImageForm
 # CRUD Create Retrieve Update Delete
 # LIST
 
@@ -163,3 +163,20 @@ def recipe_ingredient_detail_hx_view(request,id=None,ingredient_id=None):
     return render(request,"recipes/partials/ingredient-form.html",context)
 
 
+def recipe_ingredient_image_upload_view(request,parent_id=None):
+    print(request.FILES.get('image'))
+    try:
+        parent_obj = Recipe.objects.get(id=parent_id,user=request.user)
+    except:
+        parent_obj = None
+    
+    if parent_obj is None:
+        raise Http404
+    
+    form = RecipeIngredientImageForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        obj = form.save(commit=False)
+        obj.recipe = parent_obj
+        obj.save()
+
+    return render(request,"image-form.html",{"form":form})
