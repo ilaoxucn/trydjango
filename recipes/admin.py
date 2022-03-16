@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Recipe,RecipeIngredient
+from .models import Recipe,RecipeIngredient,RecipeIngredientImage
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -30,3 +30,5 @@ admin.site.register(User,UserAdmin)
 
 
 admin.site.register(Recipe,RecipeAdmin)
+
+admin.site.register(RecipeIngredientImage)
