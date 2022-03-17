@@ -6,6 +6,7 @@ from django.shortcuts import reverse
 from django.http import HttpResponse,Http404
 from .models import Recipe,RecipeIngredient
 from .forms import RecipeForm,RecipeIngredientForm,RecipeIngredientImageForm
+from .service import analyze_pic_via_facesaas
 # CRUD Create Retrieve Update Delete
 # LIST
 
@@ -181,5 +182,7 @@ def recipe_ingredient_image_upload_view(request,parent_id=None):
         obj = form.save(commit=False)
         obj.recipe = parent_obj
         obj.save()
-
+        result = analyze_pic_via_facesaas(obj.image)
+        obj.analyze_result = result
+        obj.save()
     return render(request,template_name,{"form":form})
