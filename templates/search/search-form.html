@@ -1,6 +1,7 @@
+
 <div>
-    <form action="/search/" >
-        <select name="search_type" id="search_type">
+    <form class="d-flex" action="/search/" >
+        <select class="form-control" name="search_type" id="search_type">
             {% if request.GET.search_type == 'article' %}
                 <option value="article" selected>文章</option>
             {% else %}
@@ -9,11 +10,12 @@
             {% if request.GET.search_type == 'recipe'%}
                 <option value="recipe" selected>菜谱</option>
             {% else %}
-                <option value="recipe">菜谱</option>
+                <option value="recipe" selected>菜谱</option>
             {% endif %}
             
         </select>
         <input 
+            class="form-control me-2"
             type="text" 
             name="query" 
             value="{{ request.GET.q }}" 
@@ -23,7 +25,8 @@
             hx-target="#typeahead-results"
             />
         
-        <input type="submit" />
+        <button class="btn btn-outline-success" type="submit">Search</button>
+
     </form>
     <div id="typeahead-results"></div>
 </div>
